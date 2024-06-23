@@ -11,11 +11,11 @@ type useGetLocationResult = {
   isError: boolean;
 };
 
-export function useGetLocation(): useGetLocationResult {
+export function useGetLocation(queryString: string = ""): useGetLocationResult {
   const { data, error, isLoading, isSuccess, isError } = useQuery({
-    queryKey: ["locations"],
+    queryKey: ["locations", queryString],
     queryFn: async () => {
-      return locationService.query();
+      return locationService.query(queryString);
     },
   });
 

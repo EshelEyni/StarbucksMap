@@ -6,7 +6,7 @@ const baseUrl = "location";
 
 async function query(queryString: string = "") {
   try {
-    const response = await httpService.get(`${baseUrl}?${queryString}`);
+    const response = await httpService.get(`${baseUrl}${queryString}`);
     return handleServerResponse<LocationData>(response);
   } catch (error) {
     console.error(error);

@@ -15,12 +15,15 @@ async function query() {
 }
 
 function getListOfCountries(data: StoreData[]) {
-  const countries = Array.from(new Set(data.map(location => location.country))).map(country => {
-    return {
-      name: getName(country),
-      code: country,
-    };
-  });
+  const countries = [
+    { name: "All", code: "all" },
+    ...Array.from(new Set(data.map(location => location.country))).map(country => {
+      return {
+        name: getName(country),
+        code: country,
+      };
+    }),
+  ];
   return countries;
 }
 
