@@ -14,10 +14,12 @@ import { StoreData } from "../../../shared/types/system";
 const { VITE_MAP_BOX_ACCESS_TOKEN } = import.meta.env;
 
 type MapProps = {
-  locations: StoreData[];
+  stores: StoreData[];
+  centralPoint: [number, number] | null;
+  zoomLevel: number | null;
 };
 
-export const Map: FC<MapProps> = ({ locations }) => {
+export const Map: FC<MapProps> = ({ stores, centralPoint, zoomLevel }) => {
   useEffect(() => {
     const urbanLayer = new TileLayer({
       source: new XYZ({
@@ -50,12 +52,10 @@ export const Map: FC<MapProps> = ({ locations }) => {
       });
     };
 
-    if (locations && locations.length > 0) {
-      const features = locations.map((location) => {
+    if (stores && stores.length > 0) {
+      const features = stores.map(location => {
         const feature = new Feature({
-          geometry: new Point(
-            fromLonLat([location.longitude, location.latitude])
-          ),
+          geometry: new Point(fromLonLat([location.longitude, location.latitude])),
           name: location.name,
         });
         return feature;
@@ -73,10 +73,15 @@ export const Map: FC<MapProps> = ({ locations }) => {
       map.addLayer(vectorLayer);
     }
 
+    if (centralPoint && zoomLevel) {
+      map.getView().setCenter(fromLonLat(centralPoint));
+      map.getView().setZoom(zoomLevel);
+    }
+
     return () => {
       map.setTarget(undefined);
     };
-  }, [locations]);
+  }, [stores, centralPoint, zoomLevel]);
 
   return <div id="map" className="w-7/12 h-[500px] rounded-2xl" />;
 };

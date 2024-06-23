@@ -25,4 +25,6 @@ export type CountryData = {
 export type StoreDataQueryRes = {
   stores: StoreData[];
   countries: CountryData[];
+  zoomLevel: number | null;
+  centralPoint: [number, number] | null;
 };

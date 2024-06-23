@@ -10,8 +10,16 @@ function App() {
   const queryString =
     selectedCountry === "All" ? "" : `?country=${selectedCountry}`;
 
-  const { countries, stores, error, isLoading, isSuccess, isError } =
-    useGetStoreData(queryString);
+  const {
+    countries,
+    stores,
+    centralPoint,
+    zoomLevel,
+    error,
+    isLoading,
+    isSuccess,
+    isError,
+  } = useGetStoreData(queryString);
 
   return (
     <div className="text-gray-900 flex flex-col sm:p-2 gap-4">
@@ -22,7 +30,11 @@ function App() {
       {isLoading && <Loader />}
       {isSuccess && (
         <div className="flex flex-col items-center gap-4 sm:flex-row sm:justify-center sm:gap-8">
-          <Map locations={stores} />
+          <Map
+            stores={stores}
+            centralPoint={centralPoint}
+            zoomLevel={zoomLevel}
+          />
           <CountrySelectBox
             countries={countries}
             selectedCountry={selectedCountry}

@@ -7,6 +7,7 @@ const baseUrl = "store";
 async function query(queryString: string = "") {
   try {
     const response = await httpService.get(`${baseUrl}${queryString}`);
+    console.log(response);
     return handleServerResponse<StoreDataQueryRes>(response);
   } catch (error) {
     console.error(error);
