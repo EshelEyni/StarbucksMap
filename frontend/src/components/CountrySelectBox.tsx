@@ -20,13 +20,13 @@ export const CountrySelectBox: FC<CountrySelectBoxProps> = ({
   return (
     <div className="flex">
       <select
-        className="w-64 p-2 border border-gray-300 rounded-md shadow-md"
+        className="w-full p-2 border border-gray-300 rounded-md shadow-md"
         name="countries"
         id="countries"
         onChange={handleChange}
         value={selectedCountry}
       >
-        {countries.map((country) => (
+        {countries.map(country => (
           <option key={country.code} value={country.code}>
             {country.name}
           </option>

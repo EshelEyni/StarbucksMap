@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { CountryData, StoreData } from "../../../shared/types/system";
 import { storeService } from "../services/store.service";
+import { useEffect, useState } from "react";
 
 type useGetStoreDataResult = {
   stores: StoreData[];
@@ -13,9 +14,21 @@ type useGetStoreDataResult = {
   isError: boolean;
 };
 
-export function useGetStoreData(
-  queryString: string = ""
-): useGetStoreDataResult {
+type State = {
+  stores: StoreData[];
+  countries: CountryData[];
+  centralPoint: [number, number] | null;
+  zoomLevel: number | null;
+};
+
+export function useGetStoreData(queryString: string = ""): useGetStoreDataResult {
+  const [state, setState] = useState<State>({
+    stores: [],
+    countries: [],
+    centralPoint: null,
+    zoomLevel: null,
+  });
+
   const { data, error, isLoading, isSuccess, isError } = useQuery({
     queryKey: ["store", queryString],
     queryFn: async () => {
@@ -23,26 +36,15 @@ export function useGetStoreData(
     },
   });
 
-  if (!data) {
-    return {
-      stores: [],
-      countries: [],
-      centralPoint: null,
-      zoomLevel: null,
-      error,
-      isLoading,
-      isSuccess,
-      isError,
-    };
-  }
-
-  const { stores, countries, centralPoint, zoomLevel } = data;
+  useEffect(() => {
+    if (data) {
+      const { stores, countries, centralPoint, zoomLevel } = data;
+      setState({ stores, countries, centralPoint, zoomLevel });
+    }
+  }, [data]);
 
   return {
-    stores,
-    countries,
-    centralPoint,
-    zoomLevel,
+    ...state,
     error,
     isLoading,
     isSuccess,
