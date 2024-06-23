@@ -22,7 +22,7 @@ export type CountryData = {
   code: string;
 };
 
-export type LocationData = {
-  locations: StoreData[];
+export type StoreDataQueryRes = {
+  stores: StoreData[];
   countries: CountryData[];
 };

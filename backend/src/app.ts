@@ -7,7 +7,7 @@ import path from "path";
 import cors from "cors";
 import { requestLogger } from "./middlewares/logger.middleware";
 import { AppError, errorHandler } from "./services/error.service";
-import locationRoutes from "./api/location/location.routes";
+import storeRoutes from "./api/store/store.routes";
 import { requestLimiter } from "./services/rate-limiter.service";
 
 const isProdEnv = process.env.NODE_ENV === "production";
@@ -51,7 +51,7 @@ if (!isProdEnv) {
   });
 }
 
-app.use("/api/location", locationRoutes);
+app.use("/api/store", storeRoutes);
 
 app.get("/**", (req: Request, res: Response) => {
   res.sendFile(path.join(path.resolve(), "build", "public", "index.html"));
