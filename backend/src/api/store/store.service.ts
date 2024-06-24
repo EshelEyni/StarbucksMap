@@ -5,6 +5,7 @@ import {
   FullCountryData,
   StoreData,
   StoreDataQueryRes,
+  VerifyStoreCountryParams,
 } from "../../../../shared/types/system";
 import { point, polygon, booleanPointInPolygon } from "@turf/turf";
 import { Feature, GeoJsonProperties, Polygon, Position } from "geojson";
@@ -26,23 +27,25 @@ type OSMCountryData = {
   name: string;
   display_name: string;
   boundingbox: string[];
-  geojson: {
-    type: string;
-    coordinates: Position[][][] | Position[][];
-  };
+  geojson: GeoJson;
 } | null;
+
+type GeoJson = {
+  type: string;
+  coordinates: Position[][][] | Position[][];
+};
 
 const url = "https://raw.githubusercontent.com/mmcloughlin/starbucks/master/locations.json";
 
 async function query({ country }: { country: string }): Promise<StoreDataQueryRes> {
   const response = await axios.get(url);
   let stores = response.data as StoreData[];
-  const countries = getListOfCountries(stores);
+  const countries = getListOfStoreCountries(stores);
 
   if (country === "all") {
     return {
       countries,
-      stores,
+      stores: stores.filter(store => store.store_id === 1),
       centralPoint: null,
       zoomLevel: null,
     };
@@ -75,15 +78,8 @@ function filterByCountry({
     return stores.filter(store => store.country === country);
   }
 
-  const { coordinates } = countryData.geojson;
-
-  let countryPolygons: Feature<Polygon, GeoJsonProperties>[];
-
-  if (countryData.geojson.type === "MultiPolygon") {
-    countryPolygons = (coordinates as Position[][][]).map(coords => polygon(coords));
-  } else {
-    countryPolygons = [polygon(coordinates as Position[][]) as Feature<Polygon, GeoJsonProperties>];
-  }
+  const { geojson } = countryData;
+  const countryPolygons: Feature<Polygon, GeoJsonProperties>[] = getCountryPolygon(geojson);
 
   return stores.filter(store => {
     const storePoint = point([store.longitude, store.latitude]);
@@ -106,15 +102,17 @@ async function fetchCountryData(country: string): Promise<OSMCountryData> {
   }
 }
 
-function getListOfCountries(data: StoreData[]) {
+function getListOfStoreCountries(data: StoreData[]) {
   const countries = [
     { name: "All", code: "all" },
-    ...Array.from(new Set(data.map(store => store.country))).map(country => {
-      return {
-        name: getName(country) || country,
-        code: country,
-      };
-    }),
+    ...Array.from(new Set(data.map(store => store.country)))
+      .map(country => {
+        return {
+          name: getName(country) || country,
+          code: country,
+        };
+      })
+      .sort((a, b) => a.name.localeCompare(b.name)),
   ];
   return countries;
 }
@@ -177,7 +175,33 @@ async function getCountryStoreData(): Promise<CountryStoreData> {
   };
 }
 
+function getCountryPolygon(geojson: GeoJson) {
+  let countryPolygons: Feature<Polygon, GeoJsonProperties>[];
+  const { type, coordinates } = geojson;
+
+  if (type === "MultiPolygon") {
+    countryPolygons = (coordinates as Position[][][]).map(coords => polygon(coords));
+  } else {
+    countryPolygons = [polygon(coordinates as Position[][]) as Feature<Polygon, GeoJsonProperties>];
+  }
+  return countryPolygons;
+}
+
+async function verifyStoreCountry({
+  alpha3Code,
+  longitude,
+  latitude,
+}: VerifyStoreCountryParams): Promise<boolean> {
+  const countryData = await fetchCountryData(alpha3Code);
+  if (!countryData) return false;
+
+  const storePoint = point([Number(longitude), Number(latitude)]);
+  const countryPolygon = getCountryPolygon(countryData.geojson);
+  return booleanPointInPolygon(storePoint, countryPolygon[0]);
+}
+
 export default {
   query,
   getCountryStoreData,
+  verifyStoreCountry,
 };

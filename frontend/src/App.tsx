@@ -33,6 +33,7 @@ function App() {
           )}
 
           {isLoading && <Loader />}
+          <hr className="w-full border-t-2 rounded-full border-gray-300" />
           <LocationVerificationForm />
         </div>
       </div>
