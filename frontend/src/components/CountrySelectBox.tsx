@@ -18,7 +18,7 @@ export const CountrySelectBox: FC<CountrySelectBoxProps> = ({
   }
 
   return (
-    <div className="flex flex-col items-center gap-4">
+    <div className="flex flex-col items-center gap-4 pb-5 border-b-2">
       <label htmlFor="countries" className="cursor-pointer">
         <h4 className="color-primary playwrite-nz font-bold">Choose a country:</h4>
       </label>

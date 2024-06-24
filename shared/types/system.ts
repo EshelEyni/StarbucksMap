@@ -39,3 +39,8 @@ export type FullCountryData = {
   alpha2Code: string;
   alpha3Code: string;
 };
+
+export type CountryStoreData = {
+  countries: FullCountryData[];
+  stores: StoreData[];
+};

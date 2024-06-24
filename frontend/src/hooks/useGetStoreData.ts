@@ -34,6 +34,8 @@ export function useGetStoreData(queryString: string = ""): useGetStoreDataResult
     queryFn: async () => {
       return storeService.query(queryString);
     },
+    staleTime: 1000 * 60 * 10,
+    refetchOnWindowFocus: false,
   });
 
   useEffect(() => {

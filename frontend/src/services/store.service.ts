@@ -1,4 +1,4 @@
-import { FullCountryData, StoreDataQueryRes } from "../../../shared/types/system";
+import { CountryStoreData, StoreDataQueryRes } from "../../../shared/types/system";
 import { httpService } from "./http.service";
 import { handleServerResponse } from "./util.service";
 
@@ -15,11 +15,11 @@ async function query(queryString: string = "") {
   }
 }
 
-async function getFullCountryData() {
+async function getCountryStoreData() {
   try {
     const response = await httpService.get(`${baseUrl}/country-data`);
 
-    return handleServerResponse<FullCountryData[]>(response);
+    return handleServerResponse<CountryStoreData>(response);
   } catch (error) {
     console.error(error);
     throw error;
@@ -28,5 +28,5 @@ async function getFullCountryData() {
 
 export const storeService = {
   query,
-  getFullCountryData,
+  getCountryStoreData,
 };

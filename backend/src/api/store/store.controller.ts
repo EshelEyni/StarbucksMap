@@ -13,15 +13,14 @@ const getStoreData = asyncErrorCatcher(async (req, res, next) => {
   });
 });
 
-const getCountryData = asyncErrorCatcher(async (req, res, next) => {
-  const data = await storeService.getFullCountryData();
+const getCountryStoreData = asyncErrorCatcher(async (req, res, next) => {
+  const data = await storeService.getCountryStoreData();
 
   res.status(200).json({
     status: "success",
     requestedAt: new Date().toISOString(),
-    results: data.length,
     data,
   });
 });
 
-export { getStoreData, getCountryData };
+export { getStoreData, getCountryStoreData };

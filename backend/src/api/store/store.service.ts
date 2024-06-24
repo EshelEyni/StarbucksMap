@@ -1,6 +1,11 @@
 import axios from "axios";
 import { getName } from "country-list";
-import { FullCountryData, StoreData, StoreDataQueryRes } from "../../../../shared/types/system";
+import {
+  CountryStoreData,
+  FullCountryData,
+  StoreData,
+  StoreDataQueryRes,
+} from "../../../../shared/types/system";
 import { point, polygon, booleanPointInPolygon } from "@turf/turf";
 import { Feature, GeoJsonProperties, Polygon, Position } from "geojson";
 import { logger } from "../../services/logger.service";
@@ -162,7 +167,17 @@ async function getFullCountryData(): Promise<FullCountryData[]> {
   return countries;
 }
 
+async function getCountryStoreData(): Promise<CountryStoreData> {
+  const countries = await getFullCountryData();
+  const res = await query({ country: "all" });
+  const { stores } = res;
+  return {
+    countries,
+    stores,
+  };
+}
+
 export default {
   query,
-  getFullCountryData,
+  getCountryStoreData,
 };

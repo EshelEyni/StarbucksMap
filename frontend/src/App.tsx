@@ -32,8 +32,8 @@ function App() {
             />
           )}
 
-          <LocationVerificationForm />
           {isLoading && <Loader />}
+          <LocationVerificationForm />
         </div>
       </div>
     </div>

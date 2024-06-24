@@ -1,9 +1,9 @@
 import express from "express";
-import { getStoreData, getCountryData } from "./store.controller";
+import { getStoreData, getCountryStoreData } from "./store.controller";
 
 const router = express.Router();
 
 router.get("/", getStoreData);
-router.get("/country-data", getCountryData);
+router.get("/country-data", getCountryStoreData);
 
 export default router;
