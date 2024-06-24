@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { FC, useState } from "react";
 import { CountrySelectBox } from "./components/CountrySelectBox";
 import { ErrorMsg } from "./components/ErrorMsg";
 import { Loader } from "./components/Loader";
@@ -6,7 +6,7 @@ import { Map } from "./components/Map";
 import { useGetStoreData } from "./hooks/useGetStoreData";
 import { LocationVerificationForm } from "./components/LocationVerificationForm ";
 
-function App() {
+export const App: FC = () => {
   const [selectedCountry, setSelectedCountry] = useState<string>("all");
   const queryString = selectedCountry === "All" ? "" : `?country=${selectedCountry}`;
 
@@ -38,6 +38,4 @@ function App() {
       </div>
     </div>
   );
-}
-
-export default App;
+};
