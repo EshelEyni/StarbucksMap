@@ -36,7 +36,7 @@ export const LocationVerificationForm: FC = () => {
     if (!country) setCountry(countries[0]);
   }, [isSuccess, data, country, store]);
 
-  if (isLoading) return <Loader />;
+  if (isLoading || isPending) return <Loader />;
   if (isError && error) return <ErrorMsg error={error} />;
 
   if (!isSuccess || !data) return null;

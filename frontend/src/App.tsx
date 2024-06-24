@@ -20,8 +20,8 @@ export const App: FC = () => {
       </h1>
       {isError && error && <ErrorMsg error={error} />}
 
-      <div className="flex flex-col items-center gap-4 sm:flex-row-reverse sm:justify-center sm:gap-8 sm:h-[500px] overflow-auto">
-        <div className="w-full sm:w-96 flex flex-col gap-3 sm:gap-4 justify-center items-center px-2">
+      <div className="flex flex-col gap-4 sm:flex-row-reverse sm:justify-center sm:gap-8 sm:h-[500px] md:h-[650px] overflow-auto">
+        <div className="w-full sm:w-96 flex flex-col gap-3 sm:gap-4 items-center px-2">
           {isSuccess && (
             <CountrySelectBox
               countries={countries}
