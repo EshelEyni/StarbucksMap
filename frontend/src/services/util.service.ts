@@ -1,4 +1,4 @@
-import { AnyFunction, JsendResponse } from "../../../shared/types/system";
+import { JsendResponse } from "../../../shared/types/system";
 
 function handleServerResponse<T>(response: JsendResponse): T {
   if (response.status === "success") {
@@ -13,20 +13,4 @@ function handleServerResponse<T>(response: JsendResponse): T {
   }
 }
 
-function debounce(
-  func: AnyFunction,
-  delay: number,
-): { debouncedFunc: AnyFunction; cancel: () => void } {
-  let timeoutId: ReturnType<typeof setTimeout>;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const debouncedFunc = function (this: any, ...args: any[]) {
-    clearTimeout(timeoutId);
-    timeoutId = setTimeout(() => func.apply(this, args), delay);
-  };
-  const cancel = () => {
-    clearTimeout(timeoutId);
-  };
-  return { debouncedFunc, cancel };
-}
-
-export { handleServerResponse, debounce };
+export { handleServerResponse };

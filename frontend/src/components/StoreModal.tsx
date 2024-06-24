@@ -6,13 +6,18 @@ import { Button } from "./Button";
 import classNames from "classnames";
 
 type StoreModalProps = {
+  isOpened: boolean;
+  setIsOpened: React.Dispatch<React.SetStateAction<boolean>>;
   stores: StoreData[];
-  selectedStore: StoreData | null;
   handleStoreSelect: (store: StoreData) => void;
 };
 
-export const StoreModal: FC<StoreModalProps> = ({ stores, handleStoreSelect, selectedStore }) => {
-  const [isOpened, setIsOpened] = useState<boolean>(false);
+export const StoreModal: FC<StoreModalProps> = ({
+  isOpened,
+  setIsOpened,
+  stores,
+  handleStoreSelect,
+}) => {
   const [currStores, setCurrStores] = useState<StoreData[]>([]);
   const { paginationIdx, intersectionRef } = useIntersectionPagination();
   const { outsideClickRef } = useOutsideClick<HTMLElement>(close);
@@ -41,16 +46,6 @@ export const StoreModal: FC<StoreModalProps> = ({ stores, handleStoreSelect, sel
 
   return (
     <>
-      <div
-        className="color-primary flex flex-col items-center w-full gap-1"
-        onClick={() => setIsOpened(true)}
-      >
-        <div className="color-primary rajdani-semibold text-xl cursor-pointer">Select a store</div>
-        <div className="color-primary cursor-pointer border w-full rounded-md shadow-sm h-[30px] sm:h-[40px] flex items-center justify-center">
-          <div>{selectedStore?.name}</div>
-        </div>
-      </div>
-
       <section
         ref={outsideClickRef}
         className={classNames(

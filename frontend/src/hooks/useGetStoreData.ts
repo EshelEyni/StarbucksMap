@@ -3,7 +3,7 @@ import { CountryData, StoreData } from "../../../shared/types/system";
 import { storeService } from "../services/store.service";
 import { useEffect, useState } from "react";
 
-type useGetStoreDataResult = {
+type UseGetStoreDataResult = {
   stores: StoreData[];
   countries: CountryData[];
   centralPoint: [number, number] | null;
@@ -21,7 +21,7 @@ type State = {
   zoomLevel: number | null;
 };
 
-export function useGetStoreData(queryString: string = ""): useGetStoreDataResult {
+export function useGetStoreData(queryString: string = ""): UseGetStoreDataResult {
   const [state, setState] = useState<State>({
     stores: [],
     countries: [],

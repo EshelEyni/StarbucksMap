@@ -30,11 +30,12 @@ async function getCountryStoreData() {
   }
 }
 
-async function verifyStoreCountry({ country, store }: VerifyStoreCountryParams) {
+async function verifyStoreCountry({ alpha3Code, longitude, latitude }: VerifyStoreCountryParams) {
   try {
     const response = await httpService.post(`${baseUrl}/verify-country`, {
-      country,
-      store,
+      alpha3Code,
+      longitude,
+      latitude,
     });
 
     return handleServerResponse<string>(response);

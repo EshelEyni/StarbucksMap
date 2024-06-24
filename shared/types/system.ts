@@ -46,6 +46,7 @@ export type CountryStoreData = {
 };
 
 export type VerifyStoreCountryParams = {
-  country: FullCountryData;
-  store: StoreData;
+  alpha3Code: string;
+  longitude: number;
+  latitude: number;
 };

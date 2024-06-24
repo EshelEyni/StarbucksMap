@@ -24,11 +24,12 @@ const getCountryStoreData = asyncErrorCatcher(async (req, res, next) => {
 });
 
 const verifyStoreCountry = asyncErrorCatcher(async (req, res, next) => {
-  const { country, store } = req.body;
+  const { alpha3Code, longitude, latitude } = req.body;
 
-  if (!country || !store) throw new AppError("Please provide country and store", 400);
+  if (!alpha3Code || !longitude || !latitude)
+    throw new AppError("Country code, longitude and latitude are required", 400);
 
-  const data = await storeService.verifyStoreCountry({ country, store });
+  const data = await storeService.verifyStoreCountry({ alpha3Code, longitude, latitude });
 
   res.status(200).json({
     status: "success",

@@ -8,6 +8,7 @@ import { AppError } from "../../services/error.service";
 import { filterByCountry, getCentralPoint, getCountryPolygon, getZoomLevel } from "./geo-utils";
 import { getListOfStoreCountries } from "./data-utils";
 import { fetchAllCountriesData, fetchCountryData, fetchStoresData } from "./external-data-service";
+import { getName } from "country-list";
 
 async function query({ country }: { country: string }): Promise<StoreDataQueryRes> {
   let stores = await fetchStoresData();
@@ -35,18 +36,33 @@ async function query({ country }: { country: string }): Promise<StoreDataQueryRe
   };
 }
 
-async function verifyStoreCountry({ country, store }: VerifyStoreCountryParams): Promise<string> {
-  const countryData = await fetchCountryData(country.alpha2Code);
-  if (!countryData) throw new AppError("Country data not found", 404);
+async function verifyStoreCountry({
+  alpha3Code,
+  longitude,
+  latitude,
+}: VerifyStoreCountryParams): Promise<string> {
+  const countriesData = await fetchAllCountriesData();
+
+  const alpha2Code =
+    countriesData.find(country => country.alpha3Code === alpha3Code)?.alpha2Code || "";
+  if (!alpha2Code) throw new AppError("Country not found", 404);
+
+  const countryData = await fetchCountryData(alpha2Code);
+  if (!countryData) throw new AppError("Country not found", 404);
+
   const countryPolygon = getCountryPolygon(countryData.geojson);
 
-  const { longitude, latitude } = store;
   const storePoint = point([Number(longitude), Number(latitude)]);
   const isStoreInCountry = booleanPointInPolygon(storePoint, countryPolygon[0]);
+  const stores = await fetchStoresData();
+  const store =
+    stores.find(store => store.latitude === latitude && store.longitude === longitude) || null;
+
+  const countryFullName = getName(alpha2Code);
 
   return isStoreInCountry
-    ? `Store ${store.name} is located in ${country.name}.`
-    : `Store ${store.name} is not located in ${country.name}.`;
+    ? `Store ${store?.name ? store.name + " " : ""}is located in ${countryFullName}.`
+    : `Store ${store?.name ? store.name + " " : ""}is not located in ${countryFullName}.`;
 }
 
 async function getCountryStoreData(): Promise<CountryStoreData> {
