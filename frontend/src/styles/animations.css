@@ -1,0 +1,12 @@
+@keyframes rotate360 {
+  from {
+    rotate: y 0deg;
+  }
+  to {
+    rotate: y 360deg;
+  }
+}
+
+.img-rotate {
+  animation: rotate360 3s linear infinite;
+}

@@ -13,7 +13,6 @@ export const LocationVerificationForm: FC = () => {
   const [country, setCountry] = useState<FullCountryData | null>(null);
   const [store, setStore] = useState<StoreData | null>(null);
   const { verifyStoreCountry, isPending, msg } = useVerifyStoreCountry();
-
   function handleCountrySelectChange(event: React.ChangeEvent<HTMLSelectElement>) {
     if (!data) return;
     const { value } = event.target;
@@ -31,10 +30,10 @@ export const LocationVerificationForm: FC = () => {
   }
 
   useEffect(() => {
-    if (!isSuccess || !data || !!country || !!store) return;
+    if (!isSuccess || !data) return;
     const { countries, stores } = data;
-    setStore(stores[0]);
-    setCountry(countries[0]);
+    if (!store) setStore(stores[0]);
+    if (!country) setCountry(countries[0]);
   }, [isSuccess, data, country, store]);
 
   if (isLoading) return <Loader />;
@@ -45,8 +44,8 @@ export const LocationVerificationForm: FC = () => {
   const { countries } = data;
 
   return (
-    <div className="flex flex-col items-center pt-1 gap-2">
-      <h4 className="color-primary playwrite-nz text-xl font-bold text-center sm:text-2xl mb-4">
+    <div className="flex flex-col items-center gap-2">
+      <h4 className="color-primary rajdani-bold text-2xl font-bold text-center mb-2">
         Verify store country
       </h4>
 
@@ -60,16 +59,19 @@ export const LocationVerificationForm: FC = () => {
         handleStoreSelect={handleStoreSelect}
       />
 
-      <div className="flex flex-col items-center gap-2 w-full sm:w-96">
-        <label htmlFor="countries-data" className="color-primary font-bold cursor-pointer">
+      <div className="flex flex-col items-center gap-2 w-full ">
+        <label
+          htmlFor="countries-data"
+          className="color-primary rajdani-semibold text-xl cursor-pointer"
+        >
           Select a country
         </label>
         <select
-          className="color-primary w-full p-2 border border-gray-300 rounded-md shadow-md cursor-pointer"
+          className="color-primary w-full p-1 sm:p-2 border border-gray-300 rounded-md shadow-md cursor-pointer"
           name="countries"
           id="countries-data"
           onChange={handleCountrySelectChange}
-          value={country?.name || "Choose a country"}
+          defaultValue={country?.name || "Country name"}
         >
           {countries.map(c => (
             <option
@@ -87,7 +89,7 @@ export const LocationVerificationForm: FC = () => {
         Submit
       </Button>
 
-      <div className="flex flex-col items-center gap-2 w-full sm:w-96 p-2 min-h-11">
+      <div className="flex flex-col items-center gap-2 w-full p-2 min-h-11">
         {msg && <p className="color-primary">{msg}</p>}
       </div>
     </div>

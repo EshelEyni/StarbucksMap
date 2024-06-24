@@ -1,0 +1,23 @@
+.color-primary {
+  color: var(--color-primary);
+}
+
+.rajdani-bold {
+  font-family: "Rajdhani-Bold", sans-serif;
+}
+
+.rajdani-light {
+  font-family: "Rajdhani-Light", sans-serif;
+}
+
+.rajdani-medium {
+  font-family: "Rajdhani-Medium", sans-serif;
+}
+
+.rajdani-regular {
+  font-family: "Rajdhani-Regular", sans-serif;
+}
+
+.rajdani-semibold {
+  font-family: "Rajdhani-SemiBold", sans-serif;
+}

@@ -45,8 +45,8 @@ export const StoreModal: FC<StoreModalProps> = ({ stores, handleStoreSelect, sel
         className="color-primary flex flex-col items-center w-full gap-1"
         onClick={() => setIsOpened(true)}
       >
-        <div className="color-primary font-bold cursor-pointer">Select a store</div>
-        <div className="color-primary cursor-pointer border w-full rounded-md shadow-sm h-[40px] flex items-center justify-center">
+        <div className="color-primary rajdani-semibold text-xl cursor-pointer">Select a store</div>
+        <div className="color-primary cursor-pointer border w-full rounded-md shadow-sm h-[30px] sm:h-[40px] flex items-center justify-center">
           <div>{selectedStore?.name}</div>
         </div>
       </div>
@@ -54,17 +54,17 @@ export const StoreModal: FC<StoreModalProps> = ({ stores, handleStoreSelect, sel
       <section
         ref={outsideClickRef}
         className={classNames(
-          "fixed left-1/2 top-1/2 z-[150] flex min-w-[300px] -translate-x-1/2 -translate-y-1/2 transform flex-col items-center gap-12 overflow-auto rounded-lg p-8 shadow-lg border border-gray-300 bg-white",
+          "fixed left-1/2 top-1/2 z-[150] flex min-w-[300px] -translate-x-1/2 -translate-y-1/2 transform flex-col items-center gap-12 overflow-auto rounded-lg p-8 shadow-lg border border-gray-300 bg-white h-3/4",
           {
             hidden: !isOpened,
           },
         )}
       >
         <div className="flex flex-col items-center gap-1 w-full">
-          <h3 className="color-primary playwrite-nz text-xl font-bold text-center sm:text-2xl">
+          <h3 className="color-primary rajdani-semibold text-xl text-center sm:text-2xl">
             Select a store
           </h3>
-          <p className="color-primary text-md sm:text-lg mb-4">scroll down to see more stores</p>
+          <p className="color-primary text-sm sm:text-md mb-1">scroll down to see more stores</p>
         </div>
         <ul className="flex flex-col items-center gap-2 w-full sm:w-96 h-96 overflow-auto">
           {currStores.map(store => (

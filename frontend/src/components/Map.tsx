@@ -83,5 +83,10 @@ export const Map: FC<MapProps> = ({ stores, centralPoint, zoomLevel }) => {
     };
   }, [stores, centralPoint, zoomLevel]);
 
-  return <div id="map" className="w-7/12 h-[500px] rounded-2xl" />;
+  return (
+    <div
+      id="map"
+      className="w-full sm:w-7/12 max-w-[700px] h-[300px] sm:h-[400px] md:h-[500px] lg:h-[650px]"
+    />
+  );
 };

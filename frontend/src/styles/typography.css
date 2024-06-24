@@ -1,0 +1,24 @@
+@font-face {
+  font-family: "Rajdhani-Bold";
+  src: url("/fonts/Rajdhani-Bold.ttf");
+}
+
+@font-face {
+  font-family: "Rajdhani-Light";
+  src: url("/fonts/Rajdhani-Light.ttf");
+}
+
+@font-face {
+  font-family: "Rajdhani-Medium";
+  src: url("/fonts/Rajdhani-Medium.ttf");
+}
+
+@font-face {
+  font-family: "Rajdhani-Regular";
+  src: url("/fonts/Rajdhani-Regular.ttf");
+}
+
+@font-face {
+  font-family: "Rajdhani-SemiBold";
+  src: url("/fonts/Rajdhani-SemiBold.ttf");
+}

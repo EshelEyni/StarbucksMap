@@ -1,0 +1,10 @@
+body {
+  margin: 0;
+  min-width: 100vw;
+  min-height: 100vh;
+}
+
+select,
+input {
+  outline-color: var(--color-primary);
+}

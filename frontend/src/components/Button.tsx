@@ -13,7 +13,7 @@ export const Button: FC<ButtonProps> = ({
   children,
   disabled = false,
   className = classNames(
-    "color-primary font-bold cursor-pointer border border-gray-300 rounded-full shadow-md py-2 px-4 hover:bg-gray-100",
+    "color-primary rajdani-medium cursor-pointer border border-gray-300 rounded-full shadow-md py-1 px-3 sm:py-2 sm:px-4 hover:bg-gray-100 text-md sm:text-lg transition-colors duration-200 ease-in-out",
     {
       "opacity-50": disabled,
     },

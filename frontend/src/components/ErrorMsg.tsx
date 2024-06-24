@@ -5,9 +5,5 @@ type ErrorMsgProps = {
 };
 
 export const ErrorMsg: FC<ErrorMsgProps> = ({ error }) => {
-  return (
-    <div className="text-red-500 text-center">
-      Error: {error?.message.toString()}
-    </div>
-  );
+  return <div className="text-red-500 text-center px-2">Error: {error?.message.toString()}</div>;
 };

@@ -18,12 +18,12 @@ export const CountrySelectBox: FC<CountrySelectBoxProps> = ({
   }
 
   return (
-    <div className="flex flex-col items-center gap-4 pb-5">
+    <div className="flex flex-col items-center gap-2 sm:gap-4">
       <label htmlFor="countries" className="cursor-pointer">
-        <h4 className="color-primary playwrite-nz font-bold">Choose a country:</h4>
+        <h3 className="text-2xl color-primary rajdani-bold font-bold">Choose a country:</h3>
       </label>
       <select
-        className="color-primary w-full p-2 border border-gray-300 rounded-md shadow-md cursor-pointer"
+        className="color-primary w-full p-1 sm:p-2 border border-gray-300 rounded-md shadow-md cursor-pointer"
         name="countries"
         id="countries"
         onChange={handleChange}
