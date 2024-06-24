@@ -1,11 +1,12 @@
 import axios from "axios";
 import { getName } from "country-list";
-import { StoreData, StoreDataQueryRes } from "../../../../shared/types/system";
+import { FullCountryData, StoreData, StoreDataQueryRes } from "../../../../shared/types/system";
 import { point, polygon, booleanPointInPolygon } from "@turf/turf";
 import { Feature, GeoJsonProperties, Polygon, Position } from "geojson";
 import { logger } from "../../services/logger.service";
+import { load } from "cheerio";
 
-type CountryData = {
+type OSMCountryData = {
   place_id: number;
   licence: string;
   osm_type: string;
@@ -42,7 +43,7 @@ async function query({ country }: { country: string }): Promise<StoreDataQueryRe
     };
   }
 
-  const countryData = await fetchcountryData(country);
+  const countryData = await fetchCountryData(country);
   stores = filterByCountry({ stores, country, countryData });
   const centralPoint = getCentralPoint(countryData);
   const zoomLevel = getZoomLevel(countryData);
@@ -62,7 +63,7 @@ function filterByCountry({
 }: {
   stores: StoreData[];
   country: string;
-  countryData: CountryData;
+  countryData: OSMCountryData;
 }) {
   // If no country boundary is found, filter by country code
   if (!countryData || !countryData.geojson || !countryData.geojson.coordinates) {
@@ -87,11 +88,12 @@ function filterByCountry({
   });
 }
 
-async function fetchcountryData(country: string): Promise<CountryData> {
+async function fetchCountryData(country: string): Promise<OSMCountryData> {
   try {
     const response = await axios.get(
       `https://nominatim.openstreetmap.org/search?format=json&q=${country}&polygon_geojson=1&limit=1`
     );
+
     return response.data[0];
   } catch (error) {
     logger.error("Error fetching country boundary", error);
@@ -112,7 +114,7 @@ function getListOfCountries(data: StoreData[]) {
   return countries;
 }
 
-function getCentralPoint(countryData: CountryData): [number, number] | null {
+function getCentralPoint(countryData: OSMCountryData): [number, number] | null {
   if (!countryData || !countryData.boundingbox || countryData.boundingbox.length !== 4) return null;
   const { boundingbox } = countryData;
   const [minLat, maxLat, minLon, maxLon] = boundingbox.map(Number);
@@ -121,7 +123,7 @@ function getCentralPoint(countryData: CountryData): [number, number] | null {
   return [centralLon, centralLat];
 }
 
-function getZoomLevel(countryData: CountryData): number | null {
+function getZoomLevel(countryData: OSMCountryData): number | null {
   if (!countryData || !countryData.boundingbox || countryData.boundingbox.length !== 4) return null;
   const { boundingbox } = countryData;
   const [minLat, maxLat, minLon, maxLon] = boundingbox.map(Number);
@@ -143,6 +145,24 @@ function getZoomLevel(countryData: CountryData): number | null {
   }
 }
 
+async function getFullCountryData(): Promise<FullCountryData[]> {
+  const url = "https://www.iban.com/country-codes";
+  const { data } = await axios.get(url);
+
+  const $ = load(data);
+  const countries: FullCountryData[] = [];
+
+  $("table#myTable tbody tr").each((i, element) => {
+    const name = $(element).find("td").first().text().trim();
+    const alpha2Code = $(element).find("td").eq(1).text().trim();
+    const alpha3Code = $(element).find("td").eq(2).text().trim();
+    countries.push({ name, alpha2Code, alpha3Code });
+  });
+
+  return countries;
+}
+
 export default {
   query,
+  getFullCountryData,
 };

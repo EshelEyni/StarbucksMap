@@ -17,6 +17,11 @@ export type StoreData = {
   store_id: number;
 };
 
+export type Coords = {
+  longitude: number;
+  latitude: number;
+};
+
 export type CountryData = {
   name: string;
   code: string;
@@ -27,4 +32,10 @@ export type StoreDataQueryRes = {
   countries: CountryData[];
   zoomLevel: number | null;
   centralPoint: [number, number] | null;
+};
+
+export type FullCountryData = {
+  name: string;
+  alpha2Code: string;
+  alpha3Code: string;
 };

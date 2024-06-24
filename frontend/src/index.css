@@ -24,8 +24,15 @@ body {
   min-height: 100vh;
 }
 
-.app-title {
+select {
+  outline-color: var(--color-primary);
+}
+
+.playwrite-nz {
   font-family: "PlaywriteNZ", sans-serif;
+}
+
+.color-primary {
   color: var(--color-primary);
 }
 
