@@ -8,10 +8,9 @@ import { handleServerResponse } from "./util.service";
 
 const baseUrl = "store";
 
-async function query(queryString: string = "") {
+async function query(selectedCountry: string = "all") {
   try {
-    const response = await httpService.get(`${baseUrl}${queryString}`);
-
+    const response = await httpService.get(`${baseUrl}?country=${selectedCountry}`);
     return handleServerResponse<StoreDataQueryRes>(response);
   } catch (error) {
     console.error(error);

@@ -8,10 +8,9 @@ import { LocationVerificationForm } from "./components/LocationVerificationForm 
 
 export const App: FC = () => {
   const [selectedCountry, setSelectedCountry] = useState<string>("all");
-  const queryString = selectedCountry === "All" ? "" : `?country=${selectedCountry}`;
 
   const { countries, stores, centralPoint, zoomLevel, error, isLoading, isSuccess, isError } =
-    useGetStoreData(queryString);
+    useGetStoreData(selectedCountry);
 
   return (
     <div className="text-gray-900 flex flex-col py-2 gap-4 overflow-y-auto">

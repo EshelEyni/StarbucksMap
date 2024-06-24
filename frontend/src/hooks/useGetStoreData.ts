@@ -21,7 +21,7 @@ type State = {
   zoomLevel: number | null;
 };
 
-export function useGetStoreData(queryString: string = ""): UseGetStoreDataResult {
+export function useGetStoreData(selectedCountry: string): UseGetStoreDataResult {
   const [state, setState] = useState<State>({
     stores: [],
     countries: [],
@@ -30,9 +30,9 @@ export function useGetStoreData(queryString: string = ""): UseGetStoreDataResult
   });
 
   const { data, error, isLoading, isSuccess, isError } = useQuery({
-    queryKey: ["store", queryString],
+    queryKey: ["store", selectedCountry],
     queryFn: async () => {
-      return storeService.query(queryString);
+      return storeService.query(selectedCountry);
     },
     staleTime: 1000 * 60 * 10,
     refetchOnWindowFocus: false,
