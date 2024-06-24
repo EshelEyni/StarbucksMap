@@ -8,6 +8,7 @@ type InputProps = {
   value: string;
   placeholder: string;
   maxLength?: number;
+  inputId?: string;
   label?: string;
   classes?: string;
   labelClasses?: string;
@@ -21,6 +22,7 @@ export const Input: FC<InputProps> = ({
   value,
   placeholder,
   maxLength,
+  inputId,
   label,
   classes = "",
   labelClasses = "",
@@ -36,6 +38,7 @@ export const Input: FC<InputProps> = ({
         className={classNames("color-primary rajdani-semibold text-lg cursor-pointer", {
           [labelClasses]: !!labelClasses,
         })}
+        htmlFor={inputId}
       >
         {label}
       </label>
@@ -46,6 +49,7 @@ export const Input: FC<InputProps> = ({
             [inputClasses]: !!inputClasses,
           },
         )}
+        id={inputId}
         type={type}
         name={name}
         onChange={onChange}

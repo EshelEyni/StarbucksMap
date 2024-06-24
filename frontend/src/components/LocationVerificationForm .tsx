@@ -141,6 +141,7 @@ export const LocationVerificationForm: FC = () => {
           onChange={handleInputChange}
           value={longitude?.toString() || ""}
           placeholder="Longitude"
+          inputId="longitude"
           label="Longitude"
           classes="mr-1"
           inputClasses="w-32 sm:w-40 text-center"
@@ -151,6 +152,7 @@ export const LocationVerificationForm: FC = () => {
           onChange={handleInputChange}
           value={latitude?.toString() || ""}
           placeholder="Latitude"
+          inputId="latitude"
           label="Latitude"
           classes="ml-1"
           inputClasses="w-32 sm:w-40 text-center"
@@ -196,6 +198,7 @@ export const LocationVerificationForm: FC = () => {
           value={alpha3Code || ""}
           placeholder="alpha3Code"
           maxLength={3}
+          inputId="alpha3Code"
           label="Three letter country code"
           inputClasses="w-14 text-center"
         />
