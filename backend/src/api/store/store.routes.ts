@@ -5,6 +5,6 @@ const router = express.Router();
 
 router.get("/", getStoreData);
 router.get("/country-data", getCountryStoreData);
-router.get("/verify-country", verifyStoreCountry);
+router.post("/verify-country", verifyStoreCountry);
 
 export default router;

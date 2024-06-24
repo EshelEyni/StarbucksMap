@@ -1,4 +1,8 @@
-import { CountryStoreData, StoreDataQueryRes } from "../../../shared/types/system";
+import {
+  CountryStoreData,
+  StoreDataQueryRes,
+  VerifyStoreCountryParams,
+} from "../../../shared/types/system";
 import { httpService } from "./http.service";
 import { handleServerResponse } from "./util.service";
 
@@ -26,7 +30,22 @@ async function getCountryStoreData() {
   }
 }
 
+async function verifyStoreCountry({ country, store }: VerifyStoreCountryParams) {
+  try {
+    const response = await httpService.post(`${baseUrl}/verify-country`, {
+      country,
+      store,
+    });
+
+    return handleServerResponse<string>(response);
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+}
+
 export const storeService = {
   query,
   getCountryStoreData,
+  verifyStoreCountry,
 };

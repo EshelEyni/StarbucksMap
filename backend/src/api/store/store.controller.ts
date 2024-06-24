@@ -24,15 +24,11 @@ const getCountryStoreData = asyncErrorCatcher(async (req, res, next) => {
 });
 
 const verifyStoreCountry = asyncErrorCatcher(async (req, res, next) => {
-  const [alpha3Code, longitude, latitude] = [
-    req.query.alpha3Code?.toString(),
-    req.query.longitude?.toString(),
-    req.query.latitude?.toString(),
-  ];
+  const { country, store } = req.body;
 
-  if (!alpha3Code || !longitude || !latitude) throw new AppError("Invalid query parameters", 400);
+  if (!country || !store) throw new AppError("Please provide country and store", 400);
 
-  const data = await storeService.verifyStoreCountry({ alpha3Code, longitude, latitude });
+  const data = await storeService.verifyStoreCountry({ country, store });
 
   res.status(200).json({
     status: "success",

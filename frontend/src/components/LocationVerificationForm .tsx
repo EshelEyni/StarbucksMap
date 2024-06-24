@@ -1,27 +1,41 @@
 import { FC, useEffect, useState } from "react";
-import { StoreData } from "../../../shared/types/system";
+import { FullCountryData, StoreData } from "../../../shared/types/system";
 import { useGetCountryStoreData } from "../hooks/useGetCountryStoreData";
 import { Loader } from "./Loader";
 import { ErrorMsg } from "./ErrorMsg";
 import { StoreModal } from "./StoreModal";
+import { Button } from "./Button";
+import { useVerifyStoreCountry } from "../hooks/useVerifyStoreCountry";
 
 export const LocationVerificationForm: FC = () => {
   const { data, error, isLoading, isSuccess, isError } = useGetCountryStoreData();
 
-  const [selectedCountryCode, setSelectedCountryCode] = useState<string>("");
-  const [selectedStore, setSelectedStore] = useState<StoreData | null>(null);
+  const [country, setCountry] = useState<FullCountryData | null>(null);
+  const [store, setStore] = useState<StoreData | null>(null);
+  const { verifyStoreCountry, isPending, msg } = useVerifyStoreCountry();
 
   function handleCountrySelectChange(event: React.ChangeEvent<HTMLSelectElement>) {
+    if (!data) return;
     const { value } = event.target;
-    setSelectedCountryCode(value);
+    const country = data.countries.find(c => c.alpha3Code === value) || null;
+    setCountry(country);
+  }
+
+  function handleStoreSelect(store: StoreData) {
+    setStore(store);
+  }
+
+  async function onSubmit() {
+    if (!country || !store) return;
+    verifyStoreCountry({ country, store });
   }
 
   useEffect(() => {
-    if (!isSuccess || !data || !!selectedCountryCode || !!selectedStore) return;
+    if (!isSuccess || !data || !!country || !!store) return;
     const { countries, stores } = data;
-    setSelectedStore(stores[0]);
-    setSelectedCountryCode(countries[0].alpha3Code);
-  }, [isSuccess, data, selectedCountryCode, selectedStore]);
+    setStore(stores[0]);
+    setCountry(countries[0]);
+  }, [isSuccess, data, country, store]);
 
   if (isLoading) return <Loader />;
   if (isError && error) return <ErrorMsg error={error} />;
@@ -31,19 +45,19 @@ export const LocationVerificationForm: FC = () => {
   const { countries } = data;
 
   return (
-    <div className="flex flex-col items-center pt-1">
+    <div className="flex flex-col items-center pt-1 gap-2">
       <h4 className="color-primary playwrite-nz text-xl font-bold text-center sm:text-2xl mb-4">
         Verify store country
       </h4>
 
-      <p className="color-primary text-md sm:text-lg mb-4">
+      <p className="color-primary text-sm sm:text-md mb-1">
         Select a country and a store to verify the location of the store on the map.
       </p>
 
       <StoreModal
         stores={data.stores}
-        selectedStore={selectedStore}
-        setSelectedStore={setSelectedStore}
+        selectedStore={store}
+        handleStoreSelect={handleStoreSelect}
       />
 
       <div className="flex flex-col items-center gap-2 w-full sm:w-96">
@@ -55,18 +69,26 @@ export const LocationVerificationForm: FC = () => {
           name="countries"
           id="countries-data"
           onChange={handleCountrySelectChange}
-          value={selectedCountryCode}
+          value={country?.name || "Choose a country"}
         >
-          {countries.map(country => (
+          {countries.map(c => (
             <option
-              key={country.alpha3Code}
-              value={country.alpha3Code}
+              key={c.alpha3Code}
+              value={c.alpha3Code}
               className="color-primary w-full p-2 border border-gray-300 rounded-md shadow-md"
             >
-              {country.name}
+              {c.name}
             </option>
           ))}
         </select>
+      </div>
+
+      <Button onClickFn={onSubmit} disabled={isPending}>
+        Submit
+      </Button>
+
+      <div className="flex flex-col items-center gap-2 w-full sm:w-96 p-2 min-h-11">
+        {msg && <p className="color-primary">{msg}</p>}
       </div>
     </div>
   );

@@ -53,10 +53,10 @@ export const Map: FC<MapProps> = ({ stores, centralPoint, zoomLevel }) => {
     };
 
     if (stores && stores.length > 0) {
-      const features = stores.map(location => {
+      const features = stores.map(s => {
         const feature = new Feature({
-          geometry: new Point(fromLonLat([location.longitude, location.latitude])),
-          name: location.name,
+          geometry: new Point(fromLonLat([s.longitude, s.latitude])),
+          name: s.name,
         });
         return feature;
       });

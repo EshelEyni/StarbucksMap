@@ -11,6 +11,7 @@ import { point, polygon, booleanPointInPolygon } from "@turf/turf";
 import { Feature, GeoJsonProperties, Polygon, Position } from "geojson";
 import { logger } from "../../services/logger.service";
 import { load } from "cheerio";
+import { AppError } from "../../services/error.service";
 
 type OSMCountryData = {
   place_id: number;
@@ -45,7 +46,7 @@ async function query({ country }: { country: string }): Promise<StoreDataQueryRe
   if (country === "all") {
     return {
       countries,
-      stores: stores.filter(store => store.store_id === 1),
+      stores,
       centralPoint: null,
       zoomLevel: null,
     };
@@ -187,17 +188,18 @@ function getCountryPolygon(geojson: GeoJson) {
   return countryPolygons;
 }
 
-async function verifyStoreCountry({
-  alpha3Code,
-  longitude,
-  latitude,
-}: VerifyStoreCountryParams): Promise<boolean> {
-  const countryData = await fetchCountryData(alpha3Code);
-  if (!countryData) return false;
-
-  const storePoint = point([Number(longitude), Number(latitude)]);
+async function verifyStoreCountry({ country, store }: VerifyStoreCountryParams): Promise<string> {
+  const countryData = await fetchCountryData(country.alpha2Code);
+  if (!countryData) throw new AppError("Country data not found", 404);
   const countryPolygon = getCountryPolygon(countryData.geojson);
-  return booleanPointInPolygon(storePoint, countryPolygon[0]);
+
+  const { longitude, latitude } = store;
+  const storePoint = point([Number(longitude), Number(latitude)]);
+  const isStoreInCountry = booleanPointInPolygon(storePoint, countryPolygon[0]);
+
+  return isStoreInCountry
+    ? `Store ${store.name} is located in ${country.name}.`
+    : `Store ${store.name} is not located in ${country.name}.`;
 }
 
 export default {
